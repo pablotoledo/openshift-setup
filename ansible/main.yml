@@ -1,0 +1,8 @@
+---
+  - name: Checking inventory
+    import_playbook: prerequisites.yml
+
+  - name: Installing all Pre-Requisites
+    hosts: all
+    roles: 
+      - prerequisites_ocp

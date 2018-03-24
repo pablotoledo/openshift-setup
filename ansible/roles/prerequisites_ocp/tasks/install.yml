@@ -1,0 +1,16 @@
+---
+- name: Update all packages
+  yum: name=* state=latest
+
+- name: Define ocp_dependencies.
+  set_fact:
+    ocp_dependencies: "{{ __ocp_dependencies | list }}"
+  when: ocp_dependencies is not defined
+
+- name: Ensure OpenShift dependencies are installed.
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ ocp_dependencies }}"
+
+
