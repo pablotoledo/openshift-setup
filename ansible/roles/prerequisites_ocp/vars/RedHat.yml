@@ -13,6 +13,7 @@
 # under the License.
 ---
 __ocp_dependencies:
+  - epel-release
   - wget 
   - git
   - net-tools
@@ -20,14 +21,22 @@ __ocp_dependencies:
   - iptables-services
   - bridge-utils
   - bash-completion
+  - python-passlib
   - kexec-tools
   - sos
   - psacct
   - atomic
-  - docker-1.12.6
+  - docker
   - python-cryptography
   - vim
   - python-devel
   - python-httplib2
   - sshpass
   - pyOpenSSL
+  - java-1.8.0-openjdk-headless 
+  - openssl-devel 
+  - NetworkManager 
+  - pyOpenSSL.x86_64
+  - python2-pip
+  - zile
+  - "@Development Tools"
