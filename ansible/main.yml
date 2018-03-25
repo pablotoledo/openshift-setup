@@ -6,3 +6,8 @@
     hosts: all
     roles: 
       - prerequisites_ocp
+
+  - name: Install OCP
+    hosts: ocp_master
+    roles: 
+      - install_ocp

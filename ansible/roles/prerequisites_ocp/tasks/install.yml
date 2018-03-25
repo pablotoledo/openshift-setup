@@ -13,4 +13,17 @@
     state: installed
   with_items: "{{ ocp_dependencies }}"
 
+- name: Add insecure registry and logs to docker OPTIONS
+  replace:
+   dest: /etc/sysconfig/docker
+   regexp: '^OPTIONS=.*'
+   replace: 'OPTIONS="--selinux-enabled --insecure-registry {{ openshift_prepare_services_subnet }} --log-opt max-size={{ openshift_prepare_log_max_size }} --log-opt max-file={{ openshift_prepare_log_max_file }}"'
+   backup: yes
+
+- name: Enable docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
 

@@ -1,0 +1,24 @@
+---
+- name: Install specific version of ansible that require OpenShift
+  become: yes
+  yum:
+    name: http://dl.fedoraproject.org/pub/epel/testing/7/x86_64/Packages/a/ansible-2.4.3.0-1.el7.noarch.rpm  
+    state: present
+
+- name: Download Ansible Playbooks OCP Installer
+  git:
+    repo: "https://github.com/openshift/openshift-ansible.git"
+    dest: "{{ openshift_prepare_ansible_dir }}"
+    version: "release-1.5"
+    accept_hostkey: yes
+    force: yes
+
+- name: Change mode on openshift install dir
+  file:
+    path: "{{ openshift_prepare_ansible_dir }}"
+    state: directory
+    mode: 0777
+
+
+
+

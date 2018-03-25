@@ -14,6 +14,11 @@ storage.openshift.int
 [ocp_storage:vars]
 ansible_ssh_pass=vagrant
 
+[ocp_lb]
+lb.openshift.int
+[ocp_lb:vars]
+ansible_ssh_pass=vagrant
+
 [ocp_registry]
 registry.openshift.int
 [ocp_registry:vars]
