@@ -2,11 +2,11 @@
 
   - name: Download Ansible installer Installer 
     git:
-    repo: "{{ ocp_installer }}"
-    dest: "{{ openshift_prepare_ansible_dir }}"
-    accept_hostkey: yes
-    force: yes
-    version: "{{ deploy_version }}"
+      repo: "{{ ocp_installer }}"
+      dest: "{{ openshift_prepare_ansible_dir }}"
+      accept_hostkey: yes
+      force: yes
+      version: "{{ deploy_version }}"
 
   
 
