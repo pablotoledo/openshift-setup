@@ -3,11 +3,12 @@
     import_playbook: prerequisites.yml
 
   - name: Installing all Pre-Requisites
+    become: yes
     hosts: all
     roles: 
       - prerequisites_ocp
 
-  - name: Install OCP
-    hosts: ocp_master
+  - name: Create SSH Keys and send to other nodes
+    hosts: all
     roles: 
-      - install_ocp
+      - key_distribution

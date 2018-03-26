@@ -45,12 +45,71 @@ SCRIPT
         ocp_master.vm.hostname = "master.openshift.int"
         ocp_master.vm.provision "file", source: "./ansible/" , destination: "$HOME/ansible/"
         ocp_master.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "16368"]
-            vb.customize ["modifyvm", :id, "--cpus", "4"]
+            vb.customize ["modifyvm", :id, "--memory", "8184"]
+            vb.customize ["modifyvm", :id, "--cpus", "2"]
             vb.name = "ocp_master"
         end
         ocp_master.vm.provision "shell", inline: $script_install_ansible
         ocp_master.vm.provision 'shell', inline: $script_low_sshsecurity
+	end
+
+    # Define all rest of nodes to be used by the master
+	config.vm.define "ocp_node1" do |ocp_node1|
+        ocp_node1.vm.network "private_network", ip: "192.168.25.20"
+        ocp_node1.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "8184"]
+            vb.customize ["modifyvm", :id, "--cpus", "2"]
+            vb.name = "ocp_node1"
+        end
+        ocp_node1.vm.hostname = "node1.openshift.int"
+		ocp_node1.vm.provision 'shell', inline: $script_low_sshsecurity
+	end
+
+	config.vm.define "ocp_node2" do |ocp_node2|
+        ocp_node2.vm.network "private_network", ip: "192.168.25.21"
+        ocp_node2.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "8184"]
+            vb.customize ["modifyvm", :id, "--cpus", "2"]
+            vb.name = "ocp_node2"
+        end
+        ocp_node2.vm.hostname = "node2.openshift.int"
+		ocp_node2.vm.provision 'shell', inline: $script_low_sshsecurity
+    end
+
+    # Define the LoadBalancer
+    config.vm.define "ocp_lb" do |ocp_lb|
+        ocp_lb.vm.network "private_network", ip: "192.168.25.15"
+        ocp_lb.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "2048"]
+            vb.customize ["modifyvm", :id, "--cpus", "1"]
+            vb.name = "ocp_lb"
+        end
+        ocp_lb.vm.hostname = "lb.openshift.int"
+        ocp_lb.vm.provision 'shell', inline: $script_low_sshsecurity
+	end
+    
+    # Define the storage server to host NFS volumes
+    config.vm.define "ocp_storage" do |ocp_storage|
+        ocp_storage.vm.network "private_network", ip: "192.168.25.30"
+        ocp_storage.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "1024"]
+            vb.customize ["modifyvm", :id, "--cpus", "1"]
+            vb.name = "ocp_storage"
+        end
+        ocp_storage.vm.hostname = "storage.openshift.int"
+        ocp_storage.vm.provision 'shell', inline: $script_low_sshsecurity
+	end
+
+    # Define the Docker Registry server
+    config.vm.define "ocp_registry" do |ocp_registry|
+        ocp_registry.vm.network "private_network", ip: "192.168.25.40"
+        ocp_registry.vm.provider :virtualbox do |vb|
+            vb.customize ["modifyvm", :id, "--memory", "1024"]
+            vb.customize ["modifyvm", :id, "--cpus", "1"]
+            vb.name = "ocp_registry"
+        end
+        ocp_registry.vm.hostname = "registry.openshift.int"
+        ocp_registry.vm.provision 'shell', inline: $script_low_sshsecurity
 	end
 
 end

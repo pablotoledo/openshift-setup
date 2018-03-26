@@ -5,7 +5,3 @@
 - name: Installing all dependencies
   become: yes
   include_tasks: install.yml
-
-- name: Generate and send SSH Key from master to all
-  include_tasks: ssh_key.yml
-  

@@ -1,25 +1,13 @@
 ---
-# - name: Install specific version of ansible that require OpenShift
-#   become: yes
-#   yum:
-#     name: http://dl.fedoraproject.org/pub/epel/testing/7/x86_64/Packages/a/ansible-2.4.3.0-1.el7.noarch.rpm  
-#     state: present
 
-- name: Download Installer for CentOS
-  git:
-    repo: "https://github.com/gshipley/installcentos.git"
+  - name: Download Ansible installer Installer 
+    git:
+    repo: "{{ ocp_installer }}"
     dest: "{{ openshift_prepare_ansible_dir }}"
     accept_hostkey: yes
     force: yes
+    version: "{{ deploy_version }}"
 
-# - name: Install OpenShift
-#   become: yes
-#   shell: | 
-#     export DOMAIN=master.openshift.int
-#     export USERNAME=vagrant
-#     export PASSWORD=vagrant
-#     export IP=master.openshift.int
-    #curl https://raw.githubusercontent.com/gshipley/installcentos/master/install-openshift.sh | /bin/bash
   
 
 

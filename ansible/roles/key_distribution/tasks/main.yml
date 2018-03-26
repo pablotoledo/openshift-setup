@@ -1,0 +1,5 @@
+---
+
+- name: Generate and distribuite SSH Key
+  include_tasks: ssh_key.yml
+  

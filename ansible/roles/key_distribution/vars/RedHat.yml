@@ -13,16 +13,4 @@
 # under the License.
 ---
 __ocp_dependencies:
-  - wget 
-  - git
-  - net-tools
-  - bind-utils
-  - iptables-services
-  - bridge-utils
-  - bash-completion
-  - kexec-tools
-  - sos
-  - psacct
-  - atomic
-  - docker
-  - vim
+ 

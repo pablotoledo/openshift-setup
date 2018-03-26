@@ -8,12 +8,14 @@
   when: ocp_dependencies is not defined
 
 - name: Ensure OpenShift dependencies are installed.
+  become: yes
   package:
     name: "{{ item }}"
     state: installed
   with_items: "{{ ocp_dependencies }}"
 
 - name: Add insecure registry and logs to docker OPTIONS
+  become: yes
   replace:
    dest: /etc/sysconfig/docker
    regexp: '^OPTIONS=.*'
@@ -21,6 +23,7 @@
    backup: yes
 
 - name: Enable docker service
+  become: yes
   service:
     name: docker
     state: started

@@ -1,0 +1,19 @@
+---
+
+- name: Generate SSH keys on ocp_master
+  shell: ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
+
+
+- name: Generate SSH keys root on ocp_master
+  become: yes
+  shell: ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
+
+- name: Send normal user credential
+  shell:  ssh-copy-id -i ~/.ssh/id_rsa.pub "{{ $item }}"
+  with_items: groups['all']
+
+- name: Send root user credential
+  become: yes
+  shell:  ssh-copy-id -i ~/.ssh/id_rsa.pub "{{ $item }}"
+  with_items: groups['all']
+
