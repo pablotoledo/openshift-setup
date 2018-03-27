@@ -8,12 +8,16 @@
   become: yes
   shell: ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
 
-- name: Send normal user credential
-  shell:  ssh-copy-id -i ~/.ssh/id_rsa.pub "{{ $item }}"
-  with_items: groups['all']
-
-- name: Send root user credential
+- name: Set authorized key to root
   become: yes
-  shell:  ssh-copy-id -i ~/.ssh/id_rsa.pub "{{ $item }}"
-  with_items: groups['all']
+  authorized_key:
+    user: root
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Set authorized key to ansible_user_id
+  authorized_key:
+    user: "{{ ansible_user_id }}"
+    state: present
+    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
