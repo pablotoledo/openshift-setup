@@ -39,32 +39,6 @@ SCRIPT
         sudo systemctl restart sshd
 SCRIPT
 
-    # Install Ansible script
-	$script_install_dns_server = <<SCRIPT
-    sudo yum install -y docker epel-release git
-    sudo yum install -y docker-compose bind-utils
-    sudo systemctl start docker.service
-    sudo docker run -d --name=bind --dns=127.0.0.1 \
-        --publish=53:53/udp --publish=10000:10000 \
-        --publish=53:53/tcp \
-        --env='ROOT_PASSWORD=vagrant' \
-        sameersbn/bind:latest
-SCRIPT
-
-    # Define the DNS Server
-    config.vm.define "ocp_dns_server" do |ocp_dns_server|
-        ocp_dns_server.vm.network "private_network", ip: "192.168.25.1"
-        ocp_dns_server.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "512"]
-            vb.customize ["modifyvm", :id, "--cpus", "1"]
-            vb.name = "ocp_dns_server"
-        end
-        ocp_dns_server.vm.network "forwarded_port", guest: 10000, host: 10000,  protocol: "tcp"
-        ocp_dns_server.vm.hostname = "dns.openshift.int"
-        ocp_dns_server.vm.provision 'shell', inline: $script_low_sshsecurity
-        ocp_dns_server.vm.provision 'shell', inline: $script_install_dns_server
-	end
-
 	# Define a new master ocp server where Ansible will be installed to access all destination hosts.
 	config.vm.define "ocp_master", primary: true do |ocp_master|	
         ocp_master.vm.network "private_network", ip: "192.168.25.10"
@@ -101,29 +75,5 @@ SCRIPT
         ocp_node2.vm.hostname = "node2.openshift.int"
 		ocp_node2.vm.provision 'shell', inline: $script_low_sshsecurity
     end
-
-    # Define the LoadBalancer
-    config.vm.define "ocp_lb" do |ocp_lb|
-        ocp_lb.vm.network "private_network", ip: "192.168.25.15"
-        ocp_lb.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "2048"]
-            vb.customize ["modifyvm", :id, "--cpus", "1"]
-            vb.name = "ocp_lb"
-        end
-        ocp_lb.vm.hostname = "lb.openshift.int"
-        ocp_lb.vm.provision 'shell', inline: $script_low_sshsecurity
-	end
     
-    # Define the storage server to host NFS volumes
-    config.vm.define "ocp_storage_registry" do |ocp_storage|
-        ocp_storage.vm.network "private_network", ip: "192.168.25.30"
-        ocp_storage.vm.provider :virtualbox do |vb|
-            vb.customize ["modifyvm", :id, "--memory", "1024"]
-            vb.customize ["modifyvm", :id, "--cpus", "1"]
-            vb.name = "ocp_storage"
-        end
-        ocp_storage.vm.hostname = "storage.openshift.int"
-        ocp_storage.vm.provision 'shell', inline: $script_low_sshsecurity
-	end
-
 end

@@ -1,23 +1,23 @@
 ---
 
 - name: Generate SSH keys on ocp_master
-  shell: ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
+  shell: rm ~/.ssh/id_rsa; ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
 
 
 - name: Generate SSH keys root on ocp_master
   become: yes
-  shell: ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
+  shell: rm ~/.ssh/id_rsa; ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N ""
 
 - name: Set authorized key to root
   become: yes
   authorized_key:
     user: root
     state: present
-    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', '/root/.ssh/id_rsa.pub') }}"
 
 - name: Set authorized key to ansible_user_id
   authorized_key:
-    user: "{{ ansible_user_id }}"
+    user: vagrant
     state: present
-    key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+    key: "{{ lookup('file', '/home/vagrant/.ssh/id_rsa.pub') }}"
 

@@ -1,5 +1,5 @@
 ---
 # defaults file for control
-deploy_version: release-1.5
+deploy_version: release-3.7
 ocp_installer: https://github.com/openshift/openshift-ansible.git
 openshift_prepare_ansible_dir: "/tmp/openshift-ansible"
